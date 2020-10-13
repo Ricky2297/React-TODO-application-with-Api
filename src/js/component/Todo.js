@@ -7,7 +7,7 @@ const Todo = ({ todo, index, deleteTodo }) => {
 	return (
 		<>
 			<div className="todo">
-				<h5>{todo}</h5>
+				<h5>{todo.label}</h5>
 				<button
 					className="btn-delete"
 					onClick={() => deleteTodo(index)}>

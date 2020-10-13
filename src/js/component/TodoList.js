@@ -1,47 +1,84 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Todo from "./Todo";
 
 const TodoList = () => {
 	//for new todo
 	const [todo, setTodo] = useState({});
 	//for our previous todos
-	const [todos, setTodos] = useState([
-		// { todo: "todo 1" },
-	]);
+	const [todos, setTodos] = useState([]);
 
-	//captures change event from our input, and updates our state for single todo
-	const handleChange = e => setTodo({ [e.target.name]: e.target.value });
+	useEffect(() => {
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/ricky22")
+			.then(function(response) {
+				if (!response.ok) {
+					throw Error(response.statusText);
+				}
+
+				return response.json();
+			})
+			.then(function(responseAsJson) {
+				setTodos(responseAsJson);
+			})
+			.catch(function(error) {
+				console.log("Looks like there was a problem: \n", error);
+			});
+	}, []);
+
+	const handleChange = e => setTodo({ label: e.target.value, done: false });
 
 	//checks for empty todo
 	const handleClick = e => {
-		if (Object.keys(todo).length === 0 || todo.todo.trim() === "") {
-			alert("empty list");
-			return;
-		}
 		//updates our state with previous todos, and new todo added
-		setTodos([...todos, todo]);
+
+		setTodo({ label: "", done: false });
+
+		///Fetch Api
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/ricky22", {
+			method: "PUT", // or 'POST'
+			body: JSON.stringify(todos.concat(todo)), // data can be `string` or {object}!
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+			.then(res => res.json())
+			.then(response => console.log("Success:", response))
+			.catch(error => console.error("Error:", error));
+		setTodos(todos.concat(todo));
 	};
 
 	const deleteTodo = indice => {
-		const newTodos = [...todos];
-		//splicing
-		newTodos.splice(indice, 1);
-		//returns array with deleted todo
+		var newTodos = todos.filter((task, index) => {
+			return index != indice;
+		});
+		console.log(newTodos);
 		setTodos(newTodos);
+
+		///Fetch Api
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/ricky22", {
+			method: "PUT",
+			body: JSON.stringify(newTodos), // data can be `string` or {object}!
+			headers: {
+				"Content-Type": "application/json"
+			}
+		});
 	};
 
-	//name on input line 37 same as key for our objects
 	return (
 		<>
 			<form onSubmit={e => e.preventDefault()}>
 				<br />
-				<input type="text" name="todo" onChange={handleChange} />
+				<input
+					type="text"
+					name="todo"
+					onChange={handleChange}
+					value={todo.label}
+				/>
 				<button onClick={handleClick}>save</button>
 			</form>
 
-			{todos.map((value, index) => (
+			{todos.map((task, index) => (
 				<Todo
-					todo={value.todo}
+					todo={task}
 					key={index}
 					index={index}
 					deleteTodo={deleteTodo}

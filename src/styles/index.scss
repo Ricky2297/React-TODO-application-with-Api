@@ -1,31 +1,36 @@
 @import "~bootstrap/scss/bootstrap.scss";
 
 
-
+body{
+   background: rgb(1,9,18);
+background: radial-gradient(circle, rgba(1,9,18,1) 76%, rgba(32,166,29,1) 97%);
+}
 
 h1 {
     margin:0%;
     text-align:center;
     margin-top: 30px;
     font-size: 55px;
-    color: blue;
+    color: rgba(94, 198, 247, 0.938);
 }
 //our main container
 .App-content {
     padding-top: 10px;
-    background-color: white;
+   background: rgb(46,195,34);
+    background: linear-gradient(90deg, rgba(46,195,34,1) 48%, rgba(49,253,45,0.981127485173757) 58%);
     width: 700px;
-   
+   border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: calc(10px + 2vmin);
     color: black;
-    box-shadow: 5px 10px 18px #888888;
+    box-shadow:  0px 15px 20px rgb(46,195,34);
     text-align: center;
     margin: auto;
     margin-top: 0px;
+    border:rgb(46,195,34);
    
 }
 
@@ -33,9 +38,11 @@ h1 {
 
 //where we enter our todo 
 form input {
-  height: 26px;
-  border-radius: 5%;
+  height: 35px;
+  border-radius: 10px;
+  border: rgba(94, 198, 247, 0.938);
   display: flex;
+  background: rgba(94, 198, 247, 0.938);
   //centers both vertically and horizantally because parent is flex
   vertical-align: auto;
 }
@@ -51,7 +58,7 @@ form button {
   border: solid 1px transparent;
   border-radius: 4px;
   color: #ffffff;
-  background-color: blue;
+  background-color: rgba(94, 198, 247, 0.938);
   height: 50px;
   width: 120px;
 }
@@ -113,10 +120,10 @@ h5 {
   text-decoration: none;
   border: solid 1px transparent;
   border-radius: 4px;
-  background-color: blue;
-  height: 20px;
-  width: 20px;
-  font-size: 20px;
+  background-color: rgba(94, 198, 247, 0.938);
+  height: 15px;
+  width: 15px;
+  font-size: 7px;
   margin-left: auto;
   margin-right: 25px;
 }
