@@ -3,12 +3,17 @@ import Todo from "./Todo";
 
 const TodoList = () => {
 	//for new todo
-	const [todo, setTodo] = useState({});
+	const [todo, setTodo] = useState({
+		label: "",
+		done: false
+	});
 	//for our previous todos
 	const [todos, setTodos] = useState([]);
+	const url =
+		"https://3000-bf94dc48-8c50-4a33-b826-6137c644e881.ws-us02.gitpod.io/todo/ricky";
 
 	useEffect(() => {
-		fetch("https://assets.breatheco.de/apis/fake/todos/user/ricky22")
+		fetch(url)
 			.then(function(response) {
 				if (!response.ok) {
 					throw Error(response.statusText);
@@ -27,24 +32,61 @@ const TodoList = () => {
 	const handleChange = e => setTodo({ label: e.target.value, done: false });
 
 	//checks for empty todo
+
 	const handleClick = e => {
-		//updates our state with previous todos, and new todo added
-
-		setTodo({ label: "", done: false });
-
-		///Fetch Api
-		fetch("https://assets.breatheco.de/apis/fake/todos/user/ricky22", {
-			method: "PUT", // or 'POST'
-			body: JSON.stringify(todos.concat(todo)), // data can be `string` or {object}!
+		fetch(url, {
+			method: "POST", // or 'POST'
+			body: JSON.stringify({
+				label: todo.label
+			}), // data can be `string` or {object}!
 			headers: {
 				"Content-Type": "application/json"
 			}
 		})
 			.then(res => res.json())
-			.then(response => console.log("Success:", response))
+			.then(response => {
+				console.log("Success:", response);
+				fetch(url)
+					.then(function(response) {
+						if (!response.ok) {
+							throw Error(response.statusText);
+						}
+						return response.json();
+					})
+					.then(function(responseAsJson) {
+						setTodos(responseAsJson);
+					})
+					.catch(function(error) {
+						console.log(
+							"Looks like there was a problem: \n",
+							error
+						);
+					});
+			})
 			.catch(error => console.error("Error:", error));
-		setTodos(todos.concat(todo));
+		// setTodos(todos.concat(singleTodo));
+		setTodo({ label: "", done: false });
 	};
+	// const handleClick = e => {
+	// 	//updates our state with previous todos, and new todo added
+
+	// 	setTodo({ label: "", done: false });
+
+	// 	///Fetch Api
+	// 	fetch(url, {
+	// 		method: "POST", // or 'POST'
+	// 		body: JSON.stringify(todos.concat(todo)), // data can be `string` or {object}!
+	// 		headers: {
+	// 			"Content-Type": "application/json"
+	// 		}
+	// 	})
+	// 		.then(res => res.json())
+	//         .then(response => {
+	//             fetch(url)
+	//             .then()
+	//         })
+	// 		.catch(error => console.error("Error:", error));
+	// };
 
 	const deleteTodo = indice => {
 		var newTodos = todos.filter((task, index) => {
@@ -54,7 +96,7 @@ const TodoList = () => {
 		setTodos(newTodos);
 
 		///Fetch Api
-		fetch("https://assets.breatheco.de/apis/fake/todos/user/ricky22", {
+		fetch(url, {
 			method: "PUT",
 			body: JSON.stringify(newTodos), // data can be `string` or {object}!
 			headers: {
@@ -70,7 +112,7 @@ const TodoList = () => {
 				<input
 					type="text"
 					name="todo"
-					onChange={handleChange}
+					onChange={e => setTodo({ ...todo, label: e.target.value })}
 					value={todo.label}
 				/>
 				<button onClick={handleClick}>save</button>

@@ -10,7 +10,7 @@ const Todo = ({ todo, index, deleteTodo }) => {
 				<h5>{todo.label}</h5>
 				<button
 					className="btn-delete"
-					onClick={() => deleteTodo(index)}>
+					onClick={() => deleteTodo(todo.id)}>
 					x
 				</button>
 			</div>
