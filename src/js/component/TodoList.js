@@ -37,7 +37,8 @@ const TodoList = () => {
 		fetch(url, {
 			method: "POST", // or 'POST'
 			body: JSON.stringify({
-				label: todo.label
+				label: todo.label,
+				done: false
 			}), // data can be `string` or {object}!
 			headers: {
 				"Content-Type": "application/json"
@@ -67,42 +68,17 @@ const TodoList = () => {
 		// setTodos(todos.concat(singleTodo));
 		setTodo({ label: "", done: false });
 	};
-	// const handleClick = e => {
-	// 	//updates our state with previous todos, and new todo added
 
-	// 	setTodo({ label: "", done: false });
-
-	// 	///Fetch Api
-	// 	fetch(url, {
-	// 		method: "POST", // or 'POST'
-	// 		body: JSON.stringify(todos.concat(todo)), // data can be `string` or {object}!
-	// 		headers: {
-	// 			"Content-Type": "application/json"
-	// 		}
-	// 	})
-	// 		.then(res => res.json())
-	//         .then(response => {
-	//             fetch(url)
-	//             .then()
-	//         })
-	// 		.catch(error => console.error("Error:", error));
-	// };
-
-	const deleteTodo = indice => {
-		var newTodos = todos.filter((task, index) => {
-			return index != indice;
-		});
-		console.log(newTodos);
-		setTodos(newTodos);
-
-		///Fetch Api
-		fetch(url, {
-			method: "PUT",
-			body: JSON.stringify(newTodos), // data can be `string` or {object}!
+	const deleteTodo = id => {
+		fetch(url + "/" + id, {
+			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json"
 			}
-		});
+		})
+			.then(response => response.json())
+			.then(response => setTodos(response))
+			.catch(error => console.error("Error:", error));
 	};
 
 	return (
